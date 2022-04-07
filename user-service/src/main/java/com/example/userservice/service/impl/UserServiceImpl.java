@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto getUser(String userId) {
         User user = userRepository.findById(convertStringToUUID(userId))
-                .orElseThrow(() -> new NotFoundException("User with userId: "+userId+" does not exist"));
+                .orElseThrow(() -> new NotFoundException(buildUserDoesNotExistsExceptionString(userId)));
         UserResponseDto userResponseDto = new UserResponseDto();
         BeanUtils.copyProperties(user, userResponseDto);
         return userResponseDto;
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
         UUID userIdUuid = convertStringToUUID(userId);
         Optional<User> optionalUser = userRepository.findById(userIdUuid);
         if(optionalUser.isEmpty()) {
-            throw new NotFoundException("User with userId: "+userId+" does not exist");
+            throw new NotFoundException(buildUserDoesNotExistsExceptionString(userId));
         }
         user.setUserId(userIdUuid);
         user.setEmailId(optionalUser.get().getEmailId());
@@ -75,8 +75,12 @@ public class UserServiceImpl implements UserService {
         try {
             userRepository.deleteById(convertStringToUUID(userId));
         } catch(EmptyResultDataAccessException ex) {
-            throw new NotFoundException("User with userId: "+userId+" does not exist");
+            throw new NotFoundException(buildUserDoesNotExistsExceptionString(userId));
         }
+    }
+
+    private String buildUserDoesNotExistsExceptionString(String userId) {
+        return "User with userId: "+userId+" does not exist";
     }
 
 }
