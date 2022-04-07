@@ -9,6 +9,7 @@ import com.example.userservice.repository.UserRepository;
 import com.example.userservice.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -67,6 +68,15 @@ public class UserServiceImpl implements UserService {
         UserResponseDto userResponseDto = new UserResponseDto();
         BeanUtils.copyProperties(user, userResponseDto);
         return userResponseDto;
+    }
+
+    @Override
+    public void deleteUser(String userId) {
+        try {
+            userRepository.deleteById(convertStringToUUID(userId));
+        } catch(EmptyResultDataAccessException ex) {
+            throw new NotFoundException("User with userId: "+userId+" does not exist");
+        }
     }
 
 }
