@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -51,6 +52,21 @@ public class UserServiceImpl implements UserService {
         } catch(IllegalArgumentException ex) {
             throw new BadRequestException("Invalid UUID string: "+uuidString);
         }
+    }
+
+    @Override
+    public UserResponseDto updateUser(String userId, User user) {
+        UUID userIdUuid = convertStringToUUID(userId);
+        Optional<User> optionalUser = userRepository.findById(userIdUuid);
+        if(optionalUser.isEmpty()) {
+            throw new NotFoundException("User with userId: "+userId+" does not exist");
+        }
+        user.setUserId(userIdUuid);
+        user.setEmailId(optionalUser.get().getEmailId());
+        userRepository.save(user);
+        UserResponseDto userResponseDto = new UserResponseDto();
+        BeanUtils.copyProperties(user, userResponseDto);
+        return userResponseDto;
     }
 
 }

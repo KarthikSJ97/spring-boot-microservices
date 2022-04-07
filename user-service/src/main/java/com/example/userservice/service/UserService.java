@@ -8,4 +8,6 @@ public interface UserService {
     UserResponseDto saveUser(User user);
 
     UserResponseDto getUser(String userId);
+
+    UserResponseDto updateUser(String userId, User user);
 }

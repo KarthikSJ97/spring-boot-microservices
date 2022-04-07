@@ -35,4 +35,12 @@ public class UserController {
         return ResponseEntity.ok()
                 .body(ResponseDto.success(HttpStatus.OK.value(), "Successfully fetched the user", userService.getUser(userId)));
     }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<ResponseDto<UserResponseDto>> updateUser(@PathVariable String userId, @RequestBody @Valid UserDto userDto) {
+        User user = new User();
+        BeanUtils.copyProperties(userDto, user);
+        return ResponseEntity.ok()
+                .body(ResponseDto.success(HttpStatus.OK.value(), "Successfully updated the user", userService.updateUser(userId, user)));
+    }
 }
