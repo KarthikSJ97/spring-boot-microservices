@@ -40,4 +40,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error(EXCEPTION, ex.getLocalizedMessage(), ex.getStackTrace()[0], ex.getStackTrace()[1], ex.getStackTrace()[2], ex.getStackTrace()[3]);
         return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NotFoundException.class)
+    public final ResponseEntity<ResponseDto<Object>> handleNotFoundException(NotFoundException ex) {
+        List<String> error = new ArrayList<>();
+        error.add(ex.getLocalizedMessage());
+        ResponseDto<Object> responseDto = ResponseDto.failure(HttpStatus.NOT_FOUND.value(), "NotFoundException Occurred", error);
+        log.error(EXCEPTION, ex.getLocalizedMessage(), ex.getStackTrace()[0], ex.getStackTrace()[1], ex.getStackTrace()[2], ex.getStackTrace()[3]);
+        return new ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public final ResponseEntity<ResponseDto<Object>> handleBadRequestException(BadRequestException ex) {
+        List<String> error = new ArrayList<>();
+        error.add(ex.getLocalizedMessage());
+        ResponseDto<Object> responseDto = ResponseDto.failure(HttpStatus.BAD_REQUEST.value(), "BadRequestException Occurred", error);
+        log.error(EXCEPTION, ex.getLocalizedMessage(), ex.getStackTrace()[0], ex.getStackTrace()[1], ex.getStackTrace()[2], ex.getStackTrace()[3]);
+        return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
+    }
 }

@@ -6,10 +6,7 @@ import com.example.userservice.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -26,5 +23,10 @@ public class UserController {
         User user = new User();
         BeanUtils.copyProperties(userDto, user);
         return userService.saveUser(user);
+    }
+
+    @GetMapping("/{userId}")
+    public User getUser(@PathVariable String userId) {
+        return userService.getUser(userId);
     }
 }
