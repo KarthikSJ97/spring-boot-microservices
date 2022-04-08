@@ -12,4 +12,6 @@ public interface TodoService {
     TodoResponseDto updateTodo(String todoId, Todo todo);
 
     void deleteUser(String todoId);
+
+    void updateTodoStatus(String todoId, boolean isFinished);
 }

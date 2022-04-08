@@ -95,4 +95,20 @@ public class TodoServiceImpl implements TodoService {
         }
     }
 
+    @Override
+    public void updateTodoStatus(String todoId, boolean isFinished) {
+        Todo todo = todoRepository.findById(convertStringToUUID(todoId))
+                .orElseThrow(() -> {
+                    log.error(buildTodoDoesNotExistsExceptionString(todoId));
+                    throw new NotFoundException(buildTodoDoesNotExistsExceptionString(todoId));
+                });
+        if(todo.isFinished() == isFinished) {
+            log.error("TODO already in the requested status");
+            throw new BadRequestException("TODO already in the requested status");
+        }
+        todo.setFinished(isFinished);
+        todoRepository.save(todo);
+        log.info("Successfully update the TODO status to {}", isFinished);
+    }
+
 }

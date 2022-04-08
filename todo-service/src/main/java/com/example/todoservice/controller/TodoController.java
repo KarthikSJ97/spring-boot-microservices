@@ -53,4 +53,12 @@ public class TodoController {
         todoService.deleteUser(todoId);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{todoId}/isFinished/{isFinished}")
+    public ResponseEntity<Void> updateTodoStatus(@PathVariable String todoId, @PathVariable boolean isFinished) {
+        log.info("Received a request to update the status of the TODO with todoId: {} to {}", todoId, isFinished);
+        todoService.updateTodoStatus(todoId, isFinished);
+        return ResponseEntity.noContent().build();
+    }
+
 }
