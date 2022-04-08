@@ -37,4 +37,13 @@ public class TodoController {
         return ResponseEntity.ok()
                 .body(ResponseDto.success(HttpStatus.OK.value(), "Successfully fetched the TODO details", todoService.getTodo(todoId)));
     }
+
+    @PutMapping("/{todoId}")
+    public ResponseEntity<ResponseDto<TodoResponseDto>> updateTodo(@PathVariable String todoId, @RequestBody @Valid TodoDto todoDto) {
+        log.info("Received a request to update TODO details for todoId: {}", todoId);
+        Todo todo = new Todo();
+        BeanUtils.copyProperties(todoDto, todo);
+        return ResponseEntity.ok()
+                .body(ResponseDto.success(HttpStatus.OK.value(), "Successfully updated the TODO details", todoService.updateTodo(todoId, todo)));
+    }
 }

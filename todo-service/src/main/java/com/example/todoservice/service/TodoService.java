@@ -8,4 +8,6 @@ public interface TodoService {
     TodoResponseDto saveTodo(String userId, Todo todo);
 
     TodoResponseDto getTodo(String todoId);
+
+    TodoResponseDto updateTodo(String todoId, Todo todo);
 }

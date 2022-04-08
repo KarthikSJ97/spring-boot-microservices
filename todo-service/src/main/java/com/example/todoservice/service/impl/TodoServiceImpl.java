@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -62,6 +63,24 @@ public class TodoServiceImpl implements TodoService {
 
     private String buildTodoDoesNotExistsExceptionString(String todoId) {
         return "TODO with todoId: "+todoId+" does not exist";
+    }
+
+    @Override
+    public TodoResponseDto updateTodo(String todoId, Todo todo) {
+        UUID todoIdUuid = convertStringToUUID(todoId);
+        Optional<Todo> optionalTodo = todoRepository.findById(todoIdUuid);
+        if(optionalTodo.isEmpty()) {
+            log.error(buildTodoDoesNotExistsExceptionString(todoId));
+            throw new NotFoundException(buildTodoDoesNotExistsExceptionString(todoId));
+        }
+        todo.setTodoId(todoIdUuid);
+        todo.setFinished(optionalTodo.get().isFinished());
+        todo.setUserId(optionalTodo.get().getUserId());
+        todoRepository.save(todo);
+        TodoResponseDto todoResponseDto = new TodoResponseDto();
+        BeanUtils.copyProperties(todo, todoResponseDto);
+        log.info("Successfully updated TODO details for todoId: {}", todoId);
+        return todoResponseDto;
     }
 
 }
