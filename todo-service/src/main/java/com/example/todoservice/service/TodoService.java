@@ -10,4 +10,6 @@ public interface TodoService {
     TodoResponseDto getTodo(String todoId);
 
     TodoResponseDto updateTodo(String todoId, Todo todo);
+
+    void deleteUser(String todoId);
 }

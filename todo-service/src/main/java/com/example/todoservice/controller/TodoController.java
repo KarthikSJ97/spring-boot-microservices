@@ -46,4 +46,11 @@ public class TodoController {
         return ResponseEntity.ok()
                 .body(ResponseDto.success(HttpStatus.OK.value(), "Successfully updated the TODO details", todoService.updateTodo(todoId, todo)));
     }
+
+    @DeleteMapping("/{todoId}")
+    public ResponseEntity<Void> deleteTodo(@PathVariable String todoId) {
+        log.info("Received a request to delete a TODO for todoId: {}", todoId);
+        todoService.deleteUser(todoId);
+        return ResponseEntity.noContent().build();
+    }
 }

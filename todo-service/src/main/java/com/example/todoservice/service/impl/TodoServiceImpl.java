@@ -12,6 +12,7 @@ import com.example.todoservice.service.TodoService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -81,6 +82,17 @@ public class TodoServiceImpl implements TodoService {
         BeanUtils.copyProperties(todo, todoResponseDto);
         log.info("Successfully updated TODO details for todoId: {}", todoId);
         return todoResponseDto;
+    }
+
+    @Override
+    public void deleteUser(String todoId) {
+        try {
+            todoRepository.deleteById(convertStringToUUID(todoId));
+            log.info("Successfully deleted TODO details with todoId: {}", todoId);
+        } catch(EmptyResultDataAccessException ex) {
+            log.error(buildTodoDoesNotExistsExceptionString(todoId));
+            throw new NotFoundException(buildTodoDoesNotExistsExceptionString(todoId));
+        }
     }
 
 }
