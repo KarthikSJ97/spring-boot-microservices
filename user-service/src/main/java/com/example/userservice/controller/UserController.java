@@ -24,6 +24,7 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<ResponseDto<UserResponseDto>> saveUser(@RequestBody @Valid UserDto userDto) {
+        log.info("Received a request to save a user: {}", userDto);
         User user = new User();
         BeanUtils.copyProperties(userDto, user);
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -32,12 +33,14 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<ResponseDto<UserResponseDto>> getUser(@PathVariable String userId) {
+        log.info("Received a request to fetch a user details for userId: {}", userId);
         return ResponseEntity.ok()
                 .body(ResponseDto.success(HttpStatus.OK.value(), "Successfully fetched the user", userService.getUser(userId)));
     }
 
     @PutMapping("/{userId}")
     public ResponseEntity<ResponseDto<UserResponseDto>> updateUser(@PathVariable String userId, @RequestBody @Valid UserDto userDto) {
+        log.info("Received a request to update a user details for userId: {}", userId);
         User user = new User();
         BeanUtils.copyProperties(userDto, user);
         return ResponseEntity.ok()
@@ -46,6 +49,7 @@ public class UserController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable String userId) {
+        log.info("Received a request to delete a user details for userId: {}", userId);
         userService.deleteUser(userId);
         return ResponseEntity.noContent().build();
     }
