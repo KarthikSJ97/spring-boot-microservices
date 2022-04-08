@@ -30,4 +30,11 @@ public class TodoController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ResponseDto.success(HttpStatus.CREATED.value(), "Successfully saved a TODO", todoService.saveTodo(userId, todo)));
     }
+
+    @GetMapping("/{todoId}")
+    public ResponseEntity<ResponseDto<TodoResponseDto>> getTodo(@PathVariable String todoId) {
+        log.info("Received a request to fetch TODO details for todoId: {}", todoId);
+        return ResponseEntity.ok()
+                .body(ResponseDto.success(HttpStatus.OK.value(), "Successfully fetched the TODO details", todoService.getTodo(todoId)));
+    }
 }

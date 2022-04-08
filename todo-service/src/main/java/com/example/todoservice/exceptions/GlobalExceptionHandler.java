@@ -47,6 +47,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(responseDto, HttpStatus.valueOf(ex.status()));
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    public final ResponseEntity<ResponseDto<Object>> handleNotFoundException(NotFoundException ex) {
+        List<String> error = new ArrayList<>();
+        error.add(ex.getLocalizedMessage());
+        ResponseDto<Object> responseDto = ResponseDto.failure(HttpStatus.NOT_FOUND.value(), "NotFoundException Occurred", error);
+        log.error(EXCEPTION, ex.getLocalizedMessage(), ex.getStackTrace()[0], ex.getStackTrace()[1], ex.getStackTrace()[2], ex.getStackTrace()[3]);
+        return new ResponseEntity<>(responseDto, HttpStatus.NOT_FOUND);
+    }
+
     @Override
     public final ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest webRequest) {
         List<String> errors = new ArrayList<>();

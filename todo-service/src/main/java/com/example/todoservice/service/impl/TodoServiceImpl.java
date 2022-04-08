@@ -4,6 +4,8 @@ import com.example.todoservice.dto.ResponseDto;
 import com.example.todoservice.dto.TodoResponseDto;
 import com.example.todoservice.dto.UserResponseDto;
 import com.example.todoservice.entity.Todo;
+import com.example.todoservice.exceptions.BadRequestException;
+import com.example.todoservice.exceptions.NotFoundException;
 import com.example.todoservice.http.service.UserServiceClient;
 import com.example.todoservice.repository.TodoRepository;
 import com.example.todoservice.service.TodoService;
@@ -11,6 +13,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 @Log4j2
@@ -32,6 +36,32 @@ public class TodoServiceImpl implements TodoService {
         BeanUtils.copyProperties(todo, todoResponseDto);
         log.info("Successfully saved the TODO for userId: {}", userId);
         return todoResponseDto;
+    }
+
+    @Override
+    public TodoResponseDto getTodo(String todoId) {
+        Todo todo = todoRepository.findById(convertStringToUUID(todoId))
+                .orElseThrow(() -> {
+                    log.error(buildTodoDoesNotExistsExceptionString(todoId));
+                    throw new NotFoundException(buildTodoDoesNotExistsExceptionString(todoId));
+                });
+        TodoResponseDto todoResponseDto = new TodoResponseDto();
+        BeanUtils.copyProperties(todo, todoResponseDto);
+        log.info("Successfully fetched TODO details with todoId: {}", todoId);
+        return todoResponseDto;
+    }
+
+    private UUID convertStringToUUID(String uuidString) {
+        try {
+            return UUID.fromString(uuidString);
+        } catch(IllegalArgumentException ex) {
+            log.error("Invalid UUID string: {}", uuidString);
+            throw new BadRequestException("Invalid UUID string: "+uuidString);
+        }
+    }
+
+    private String buildTodoDoesNotExistsExceptionString(String todoId) {
+        return "TODO with todoId: "+todoId+" does not exist";
     }
 
 }
