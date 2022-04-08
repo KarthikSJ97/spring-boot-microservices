@@ -54,10 +54,10 @@ public class TodoController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{todoId}/isFinished/{isFinished}")
-    public ResponseEntity<Void> updateTodoStatus(@PathVariable String todoId, @PathVariable boolean isFinished) {
-        log.info("Received a request to update the status of the TODO with todoId: {} to {}", todoId, isFinished);
-        todoService.updateTodoStatus(todoId, isFinished);
+    @PatchMapping("/{todoId}/isCompleted/{isCompleted}")
+    public ResponseEntity<Void> updateTodoStatus(@PathVariable String todoId, @PathVariable boolean isCompleted) {
+        log.info("Received a request to update the status of the TODO with todoId: {} to {}", todoId, isCompleted);
+        todoService.updateTodoStatus(todoId, isCompleted);
         return ResponseEntity.noContent().build();
     }
 

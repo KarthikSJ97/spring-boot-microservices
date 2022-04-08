@@ -12,5 +12,5 @@ import java.util.UUID;
 public class TodoResponseDto extends TodoDto {
 
     private UUID todoId;
-    private boolean isFinished;
+    private boolean isCompleted;
 }

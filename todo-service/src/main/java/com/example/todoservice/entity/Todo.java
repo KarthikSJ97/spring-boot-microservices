@@ -34,8 +34,8 @@ public class Todo {
     @Column(name = "todo_description", nullable = false)
     private String todoDescription;
 
-    @Column(name = "is_finished", nullable = false, columnDefinition = "boolean default false")
-    private boolean isFinished;
+    @Column(name = "is_completed", nullable = false, columnDefinition = "boolean default false")
+    private boolean isCompleted;
 
     @Type(type = "org.hibernate.type.UUIDCharType")
     @GeneratedValue(generator = "uuid")
