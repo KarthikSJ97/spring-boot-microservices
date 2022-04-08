@@ -37,4 +37,13 @@ public class Todo {
     @Column(name = "is_finished", nullable = false, columnDefinition = "boolean default false")
     private boolean isFinished;
 
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "user_id", columnDefinition = "char(36)", nullable = false)
+    private UUID userId;
+
 }
