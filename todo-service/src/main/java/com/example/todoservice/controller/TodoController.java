@@ -24,6 +24,7 @@ public class TodoController {
 
     @PostMapping
     public ResponseEntity<ResponseDto<TodoResponseDto>> saveTodo(@RequestParam String userId, @RequestBody @Valid TodoDto todoDto) {
+        log.info("Received a request to save a TODO: {} for userId: {}", todoDto, userId);
         Todo todo = new Todo();
         BeanUtils.copyProperties(todoDto, todo);
         return ResponseEntity.status(HttpStatus.CREATED)

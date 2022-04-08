@@ -30,7 +30,8 @@ public class TodoServiceImpl implements TodoService {
         todoRepository.save(todo);
         TodoResponseDto todoResponseDto = new TodoResponseDto();
         BeanUtils.copyProperties(todo, todoResponseDto);
+        log.info("Successfully saved the TODO for userId: {}", userId);
         return todoResponseDto;
     }
-    
+
 }
